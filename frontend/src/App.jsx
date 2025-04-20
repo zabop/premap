@@ -10,13 +10,15 @@ const auth = window.osmAuth.osmAuth({
 
 export default function App() {
   const [user, setUser] = useState(null);
-  const [error, setError] = useState("");
+  const [instructions, setInstructions] = useState(
+    "Log in and you'll get an image to click on."
+  );
 
   // Function to fetch user details using the auth.xhr method provided by osmAuth
   function fetchUserDetails() {
     auth.xhr({ method: "GET", path: "/api/0.6/user/details" }, (err, res) => {
       if (err) {
-        setError("Failed to fetch user details");
+        setInstructions("Failed to fetch user details");
         return;
       }
 
@@ -28,7 +30,7 @@ export default function App() {
         id: userEl.getAttribute("id"),
         count: changesets.getAttribute("count"),
       });
-      setError("");
+      setInstructions("");
     });
   }
 
@@ -38,7 +40,7 @@ export default function App() {
       window.location.search.includes("code=") &&
       !auth.authenticated() &&
       !user &&
-      !error
+      !instructions
     ) {
       auth.authenticate(() => {
         // Remove the auth code from the URL for a cleaner history entry.
@@ -55,7 +57,7 @@ export default function App() {
   function handleLogout() {
     auth.logout();
     setUser(null);
-    setError("");
+    setInstructions("");
   }
 
   return (
@@ -63,10 +65,10 @@ export default function App() {
       <button onClick={handleLogin}>Login</button>
       <button onClick={handleLogout}>Logout</button>
 
-      {error && <> {error} </>}
+      {instructions && <> {instructions} </>}
 
       {user && <> Authenticated: {user.name} </>}
-      <Image />
+      {user && <Image />}
     </div>
   );
 }
