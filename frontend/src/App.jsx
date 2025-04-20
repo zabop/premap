@@ -10,7 +10,7 @@ const auth = window.osmAuth.osmAuth({
 
 export default function App() {
   const [user, setUser] = useState(null);
-  const [instructions, setInstructions] = useState(
+  const [state, setState] = useState(
     "Log in and you'll get an image to click on."
   );
 
@@ -18,7 +18,7 @@ export default function App() {
   function fetchUserDetails() {
     auth.xhr({ method: "GET", path: "/api/0.6/user/details" }, (err, res) => {
       if (err) {
-        setInstructions("Failed to fetch user details");
+        setState("Failed to fetch user details");
         return;
       }
 
@@ -29,7 +29,7 @@ export default function App() {
         name: name,
         id: userEl.getAttribute("id"),
       });
-      setInstructions(`Authenticated: ${name}`);
+      setState(`Authenticated: ${name}`);
     });
   }
 
@@ -39,7 +39,7 @@ export default function App() {
       window.location.search.includes("code=") &&
       !auth.authenticated() &&
       !user &&
-      !instructions
+      !state
     ) {
       auth.authenticate(() => {
         // Remove the auth code from the URL for a cleaner history entry.
@@ -56,7 +56,7 @@ export default function App() {
   function handleLogout() {
     auth.logout();
     setUser(null);
-    setInstructions("Logged out.");
+    setState("Logged out.");
   }
 
   return (
@@ -64,9 +64,11 @@ export default function App() {
       <button onClick={handleLogin}>Login</button>
       <button onClick={handleLogout}>Logout</button>
 
-      {instructions && <> {instructions} </>}
+      {state && <> {state} </>}
 
       {user && <Image />}
+      {user &&
+        "Click on the place where a power pole or tower meets the ground!"}
     </div>
   );
 }
