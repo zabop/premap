@@ -61,6 +61,26 @@ def prepare_URL_resp():
     return collection.find_one({"reviews": {}})["URL"]
 
 
+@app.get("/get_results")
+async def get_results(request: Request):
+
+    res = {
+        "reviewed": [
+            {e["URL"]: e["reviews"]}
+            for e in collection.find()
+            if len(e["reviews"]) != 0
+        ]
+    } | {
+        "not_reviewed": [
+            {e["URL"]: e["reviews"]}
+            for e in collection.find()
+            if len(e["reviews"]) == 0
+        ]
+    }
+
+    return JSONResponse(res)
+
+
 @app.get("/get")
 async def get(request: Request):
     return JSONResponse({"URL": prepare_URL_resp()})
