@@ -8,7 +8,6 @@ const auth = window.osmAuth.osmAuth({
 });
 
 export default function Image() {
-  const [coords, setCoords] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef(null);
 
@@ -54,7 +53,6 @@ export default function Image() {
     const x = Math.round(clickX * scaleX);
     const y = Math.round(clickY * scaleY);
 
-    setCoords({ x, y });
     sendReview(x, y);
   };
 
@@ -69,11 +67,6 @@ export default function Image() {
             onClick={handleClick}
             style={{ cursor: "crosshair", maxWidth: "100%", height: "auto" }}
           />
-          {coords && (
-            <p>
-              You clicked at: ({coords.x}, {coords.y})
-            </p>
-          )}
         </>
       ) : (
         <p>Loading image...</p>
