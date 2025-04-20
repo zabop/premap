@@ -1,0 +1,8 @@
+fastapi==0.115.12
+uvicorn==0.34.1
+pydantic==2.11.3
+osmapi==4.3.0
+cli-oauth2
+requests-oauthlib==2.0.0
+pymongo[srv]
+python-dotenv
