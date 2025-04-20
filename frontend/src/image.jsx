@@ -77,9 +77,6 @@ export default function Image() {
       <button onClick={() => sendReview(-99, -99)}>
         No power pole or tower on this image
       </button>
-      <button onClick={() => console.log("Skip review")}>
-        I don't want to review this image
-      </button>
     </div>
   );
 }
