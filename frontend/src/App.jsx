@@ -23,14 +23,13 @@ export default function App() {
       }
 
       const userEl = res.getElementsByTagName("user")[0];
-      const changesets = res.getElementsByTagName("changesets")[0];
+      const name = userEl.getAttribute("display_name");
 
       setUser({
-        name: userEl.getAttribute("display_name"),
+        name: name,
         id: userEl.getAttribute("id"),
-        count: changesets.getAttribute("count"),
       });
-      setInstructions("");
+      setInstructions(`Authenticated: ${name}`);
     });
   }
 
@@ -57,7 +56,7 @@ export default function App() {
   function handleLogout() {
     auth.logout();
     setUser(null);
-    setInstructions("");
+    setInstructions("Logged out.");
   }
 
   return (
@@ -67,7 +66,6 @@ export default function App() {
 
       {instructions && <> {instructions} </>}
 
-      {user && <> Authenticated: {user.name} </>}
       {user && <Image />}
     </div>
   );
