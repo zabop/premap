@@ -11,12 +11,17 @@ export default function Image() {
   const [imageUrl, setImageUrl] = useState(null);
   const imgRef = useRef(null);
 
+  const fetchImageUrl = async () => {
+    const res = await fetch("https://premap.fly.dev/get");
+    const data = await res.json();
+    setImageUrl(data.URL);
+  };
+
   function sendReview(x, y) {
     auth.xhr(
       {
         method: "POST",
         path: `https://premap.fly.dev/post`,
-        //path: `http://0.0.0.0:8080/post`,
         prefix: false,
         content: JSON.stringify({ URL: imageUrl, x: x, y: y }),
         headers: {
@@ -26,17 +31,12 @@ export default function Image() {
       },
       (err, res) => {
         console.log("review sent");
+        fetchImageUrl(); // fetch a new image after sending review
       }
     );
   }
 
   useEffect(() => {
-    const fetchImageUrl = async () => {
-      const res = await fetch("https://premap.fly.dev/get");
-      //const res = await fetch("http://0.0.0.0:8080/get");
-      const data = await res.json();
-      setImageUrl(data.URL);
-    };
     fetchImageUrl();
   }, []);
 
