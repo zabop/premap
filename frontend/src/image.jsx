@@ -16,8 +16,8 @@ export default function Image() {
     auth.xhr(
       {
         method: "POST",
-        // path: `https://premap.fly.dev/post`,
-        path: `http://0.0.0.0:8080/post`,
+        path: `https://premap.fly.dev/post`,
+        //path: `http://0.0.0.0:8080/post`,
         prefix: false,
         content: JSON.stringify({ URL: imageUrl, x: x, y: y }),
         headers: {
@@ -33,8 +33,8 @@ export default function Image() {
 
   useEffect(() => {
     const fetchImageUrl = async () => {
-      // const res = await fetch("https://premap.fly.dev/get");
-      const res = await fetch("http://0.0.0.0:8080/get");
+      const res = await fetch("https://premap.fly.dev/get");
+      //const res = await fetch("http://0.0.0.0:8080/get");
       const data = await res.json();
       setImageUrl(data.URL);
     };
