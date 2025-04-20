@@ -67,6 +67,11 @@ export default function App() {
       {state && <> {state} </>}
 
       {user && <Image />}
+      <div>
+        <a href="https://premap.fly.dev/get_results" target="_blank">
+          View Results
+        </a>
+      </div>
     </div>
   );
 }
