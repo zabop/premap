@@ -75,7 +75,7 @@ export default function Image() {
         Click on the place where a power pole or tower meets the ground!
       </div>
       <button onClick={() => sendReview(-99, -99)}>
-        No power pole or tower on this image
+        I can't confidently locate a pole or tower on this image
       </button>
     </div>
   );
