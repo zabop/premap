@@ -1,6 +1,6 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Request, Query
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 
 from pydantic import BaseModel
 import xml.etree.ElementTree as ET
@@ -27,6 +27,12 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
+
+
+class PostBody(BaseModel):
+    URL: str
+    x: int
+    y: int
 
 
 uri = os.getenv("MONGODB_URI")
@@ -58,3 +64,15 @@ def prepare_URL_resp():
 @app.get("/get")
 async def get(request: Request):
     return JSONResponse({"URL": prepare_URL_resp()})
+
+
+@app.post("/post")
+async def post(request: Request, postBody: PostBody):
+
+    user = auth(request.headers.get("Authorization"))
+    collection.update_one(
+        {"URL": postBody.URL},
+        {"$set": {"reviews": {user: [postBody.x, postBody.y]}}},
+    )
+
+    return Response(status_code=200)
