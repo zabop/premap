@@ -31,8 +31,7 @@ export default function Image() {
       />
       {coords && (
         <p>
-          You clicked at: (<strong>{coords.x}</strong>,{" "}
-          <strong>{coords.y}</strong>)
+          You clicked at: ({coords.x}, {coords.y})
         </p>
       )}
     </div>
