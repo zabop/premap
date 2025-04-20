@@ -67,8 +67,6 @@ export default function App() {
       {state && <> {state} </>}
 
       {user && <Image />}
-      {user &&
-        "Click on the place where a power pole or tower meets the ground!"}
     </div>
   );
 }
