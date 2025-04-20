@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: Set Fly.io secret
+      - name: Set MongoDB URI
         run: flyctl secrets set MONGODB_URI="${{ secrets.MONGODB_URI }}"
         working-directory: backend
         env:
