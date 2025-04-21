@@ -71,11 +71,9 @@ export default function Image() {
       ) : (
         <p>Loading image...</p>
       )}
-      <div>
-        Click on the place where a power pole or tower meets the ground!
-      </div>
+      <div>Click on the place where a power pole meets the ground!</div>
       <button onClick={() => sendReview(-99, -99)}>
-        I can't confidently locate a pole or tower on this image
+        I can't confidently locate a power pole on this image
       </button>
     </div>
   );
