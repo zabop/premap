@@ -31,6 +31,7 @@ app.add_middleware(
 
 class PostBody(BaseModel):
     URL: str
+    sidelength_in_pixels: int
     x: int
     y: int
 
@@ -59,6 +60,31 @@ def auth(auth_header):
 
 def prepare_URL_resp():
     return collection.find_one({"reviews": {}})["URL"]
+
+
+maxc = 20037508.342789244
+sidelength = lambda z: 2 * maxc / (2**z)
+
+
+def get_SW_tile_corner(z, x, y):
+    x = -maxc + sidelength(z) * x
+    y = maxc - 2 * maxc / (2**z) - sidelength(z) * y
+    return x, y
+
+
+def pixel_coords_to_epsg3857_coords(url, sidelength_in_pixels, x, y):
+
+    tileid = "/".join(url.split("/")[-3:]).replace(".jpg", "").replace(".jpeg")
+    z, x, y = [int(e) for e in tileid.split("/")]
+    x, y = get_SW_tile_corner(z, x, y)
+
+    dx = x / sidelength_in_pixels * sidelength(z)
+    dy = (sidelength_in_pixels - y) / sidelength_in_pixels * sidelength(z)
+
+    x += dx
+    y += dy
+
+    return [x, y]
 
 
 @app.get("/get_results")
@@ -92,7 +118,21 @@ async def post(request: Request, postBody: PostBody):
     user = auth(request.headers.get("Authorization"))
     collection.update_one(
         {"URL": postBody.URL},
-        {"$set": {"reviews": {user: [postBody.x, postBody.y]}}},
+        {
+            "$set": {
+                "reviews": {
+                    user: {
+                        "pixelcoords": [postBody.x, postBody.y],
+                        "epsg3857coords": pixel_coords_to_epsg3857_coords(
+                            postBody.URL,
+                            postBody.sidelength_in_pixels,
+                            postBody.x,
+                            postBody.y,
+                        ),
+                    }
+                }
+            }
+        },
     )
 
     return Response(status_code=200)
