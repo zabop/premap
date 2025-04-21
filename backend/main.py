@@ -74,7 +74,7 @@ def get_SW_tile_corner(z, x, y):
 
 def pixel_coords_to_epsg3857_coords(url, sidelength_in_pixels, x, y):
 
-    tileid = "/".join(url.split("/")[-3:]).replace(".jpg", "").replace(".jpeg")
+    tileid = "/".join(url.split("/")[-3:]).replace(".jpg", "").replace(".jpeg", "")
     z, x, y = [int(e) for e in tileid.split("/")]
     x, y = get_SW_tile_corner(z, x, y)
 
