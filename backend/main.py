@@ -75,16 +75,16 @@ def get_SW_tile_corner(z, x, y):
 def pixel_coords_to_epsg3857_coords(url, sidelength_in_pixels, x, y):
 
     tileid = "/".join(url.split("/")[-3:]).replace(".jpg", "").replace(".jpeg", "")
-    z, x, y = [int(e) for e in tileid.split("/")]
-    x, y = get_SW_tile_corner(z, x, y)
+    tilez, tilex, tiley = [int(e) for e in tileid.split("/")]
+    x_epsg3857, y_epsg3857 = get_SW_tile_corner(tilez, tilex, tiley)
 
-    dx = x / sidelength_in_pixels * sidelength(z)
-    dy = (sidelength_in_pixels - y) / sidelength_in_pixels * sidelength(z)
+    dx = x / sidelength_in_pixels * sidelength(tilez)
+    dy = (sidelength_in_pixels - y) / sidelength_in_pixels * sidelength(tilez)
 
-    x += dx
-    y += dy
+    x_epsg3857 += dx
+    y_epsg3857 += dy
 
-    return [x, y]
+    return [x_epsg3857, y_epsg3857]
 
 
 @app.get("/get_results")
