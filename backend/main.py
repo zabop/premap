@@ -10,6 +10,9 @@ from requests_oauthlib import OAuth2Session
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
+import shapely.ops
+import pyproj
+
 import os
 
 from dotenv import load_dotenv
@@ -87,6 +90,23 @@ def pixel_coords_to_epsg3857_coords(url, sidelength_in_pixels, x, y):
     return [x_epsg3857, y_epsg3857]
 
 
+def pixel_coords_to_lat_lon(url, sidelength_in_pixels, x, y):
+
+    x_epsg3857, y_epsg3857 = pixel_coords_to_epsg3857_coords(
+        url, sidelength_in_pixels, x, y
+    )
+
+    transformer = pyproj.Transformer.from_crs(
+        pyproj.crs.CRS("epsg:3857"), pyproj.crs.CRS("epsg:4326"), always_xy=True
+    )
+
+    [lon], [lat] = shapely.ops.transform(
+        transformer.transform, shapely.geometry.Point(x_epsg3857, y_epsg3857)
+    ).xy
+
+    return [lat, lon]
+
+
 @app.get("/get_results")
 async def get_results(request: Request):
 
@@ -118,16 +138,15 @@ async def post(request: Request, postBody: PostBody):
     user = auth(request.headers.get("Authorization"))
 
     if postBody.x != -99:
-        epsg3857coords = (
-            pixel_coords_to_epsg3857_coords(
-                postBody.URL,
-                postBody.sidelength_in_pixels,
-                postBody.x,
-                postBody.y,
-            ),
+        [lat, lon] = pixel_coords_to_lat_lon(
+            postBody.URL,
+            postBody.sidelength_in_pixels,
+            postBody.x,
+            postBody.y,
         )
+
     else:
-        epsg3857coords = [-99, -99]
+        lat, lon = -99, -99
 
     collection.update_one(
         {"URL": postBody.URL},
@@ -136,7 +155,7 @@ async def post(request: Request, postBody: PostBody):
                 "reviews": {
                     user: {
                         "pixelcoords": [postBody.x, postBody.y],
-                        "epsg3857coords": epsg3857coords,
+                        "latlon": [lat, lon],
                     }
                 }
             }

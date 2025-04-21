@@ -6,3 +6,5 @@ cli-oauth2
 requests-oauthlib==2.0.0
 pymongo[srv]
 python-dotenv
+shapely==2.1.0
+pyproj==3.7.1
