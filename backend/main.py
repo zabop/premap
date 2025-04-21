@@ -116,6 +116,19 @@ async def get(request: Request):
 async def post(request: Request, postBody: PostBody):
 
     user = auth(request.headers.get("Authorization"))
+
+    if postBody.x != -99:
+        epsg3857coords = (
+            pixel_coords_to_epsg3857_coords(
+                postBody.URL,
+                postBody.sidelength_in_pixels,
+                postBody.x,
+                postBody.y,
+            ),
+        )
+    else:
+        epsg3857coords = [-99, -99]
+
     collection.update_one(
         {"URL": postBody.URL},
         {
@@ -123,12 +136,7 @@ async def post(request: Request, postBody: PostBody):
                 "reviews": {
                     user: {
                         "pixelcoords": [postBody.x, postBody.y],
-                        "epsg3857coords": pixel_coords_to_epsg3857_coords(
-                            postBody.URL,
-                            postBody.sidelength_in_pixels,
-                            postBody.x,
-                            postBody.y,
-                        ),
+                        "epsg3857coords": epsg3857coords,
                     }
                 }
             }
