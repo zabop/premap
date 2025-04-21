@@ -17,13 +17,20 @@ export default function Image() {
     setImageUrl(data.URL);
   };
 
-  function sendReview(x, y) {
+  function sendReview(x, y, sidelength_in_pixels) {
+    console.log("sidelength_in_pixels", sidelength_in_pixels);
     auth.xhr(
       {
         method: "POST",
         path: `https://premap.fly.dev/post`,
+        // path: `http://0.0.0.0:8080/post`,
         prefix: false,
-        content: JSON.stringify({ URL: imageUrl, x: x, y: y }),
+        content: JSON.stringify({
+          URL: imageUrl,
+          sidelength_in_pixels: sidelength_in_pixels,
+          x: x,
+          y: y,
+        }),
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -53,7 +60,7 @@ export default function Image() {
     const x = Math.round(clickX * scaleX);
     const y = Math.round(clickY * scaleY);
 
-    sendReview(x, y);
+    sendReview(x, y, rect.width);
   };
 
   return (
@@ -72,7 +79,7 @@ export default function Image() {
         <p>Loading image...</p>
       )}
       <div>Click on the place where a power pole meets the ground!</div>
-      <button onClick={() => sendReview(-99, -99)}>
+      <button onClick={() => sendReview(-99, -99, -99)}>
         I can't confidently locate a power pole on this image
       </button>
     </div>
