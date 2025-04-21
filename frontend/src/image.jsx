@@ -18,7 +18,6 @@ export default function Image() {
   };
 
   function sendReview(x, y, sidelength_in_pixels) {
-    console.log("sidelength_in_pixels", sidelength_in_pixels);
     auth.xhr(
       {
         method: "POST",
@@ -37,7 +36,6 @@ export default function Image() {
         },
       },
       (err, res) => {
-        console.log("review sent");
         fetchImageUrl(); // fetch a new image after sending review
       }
     );
