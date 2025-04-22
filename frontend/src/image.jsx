@@ -21,8 +21,8 @@ export default function Image() {
     auth.xhr(
       {
         method: "POST",
-        path: `https://premap.fly.dev/post`,
-        // path: `http://0.0.0.0:8080/post`,
+        //path: `https://premap.fly.dev/post`,
+        path: `http://0.0.0.0:8080/post`,
         prefix: false,
         content: JSON.stringify({
           URL: imageUrl,
@@ -72,11 +72,15 @@ export default function Image() {
             onClick={handleClick}
             style={{ cursor: "crosshair", maxWidth: "100%", height: "auto" }}
           />
+          <img src="https://fastly.picsum.photos/id/321/256/256.jpg?hmac=4HAKLrIEnu_paiCEXb4rFgl0nNx6f-ubjThdxyMZPJ0" />
         </>
       ) : (
         <p>Loading image...</p>
       )}
-      <div>Click on the place where a power pole meets the ground!</div>
+      <div>
+        On the leftmost image, click on the place where a power pole meets the
+        ground!
+      </div>
       <button onClick={() => sendReview(-99, -99, -99)}>
         I can't confidently locate a power pole on this image
       </button>
