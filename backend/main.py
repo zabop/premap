@@ -62,7 +62,8 @@ def auth(auth_header):
 
 
 def prepare_URL_resp():
-    return collection.find_one({"reviews": {}})["URL"]
+    selected = collection.find_one({"reviews": {}})
+    return {"URL": selected["URL"], "helperUrl": selected["helperUrl"]}
 
 
 maxc = 20037508.342789244
@@ -129,7 +130,7 @@ async def get_results(request: Request):
 
 @app.get("/get")
 async def get(request: Request):
-    return JSONResponse({"URL": prepare_URL_resp()})
+    return JSONResponse(prepare_URL_resp())
 
 
 @app.post("/post")

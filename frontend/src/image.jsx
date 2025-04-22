@@ -9,12 +9,14 @@ const auth = window.osmAuth.osmAuth({
 
 export default function Image() {
   const [imageUrl, setImageUrl] = useState(null);
+  const [helperUrl, setHelperUrl] = useState(null);
   const imgRef = useRef(null);
 
   const fetchImageUrl = async () => {
     const res = await fetch("https://premap.fly.dev/get");
     const data = await res.json();
     setImageUrl(data.URL);
+    setHelperUrl(data.helperUrl);
   };
 
   function sendReview(x, y, sidelength_in_pixels) {
@@ -72,7 +74,7 @@ export default function Image() {
             onClick={handleClick}
             style={{ cursor: "crosshair", maxWidth: "100%", height: "auto" }}
           />
-          <img src="https://fastly.picsum.photos/id/321/256/256.jpg?hmac=4HAKLrIEnu_paiCEXb4rFgl0nNx6f-ubjThdxyMZPJ0" />
+          <img src={helperUrl} />
         </>
       ) : (
         <p>Loading image...</p>
