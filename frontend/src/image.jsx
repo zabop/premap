@@ -23,8 +23,8 @@ export default function Image() {
     auth.xhr(
       {
         method: "POST",
-        //path: `https://premap.fly.dev/post`,
-        path: `http://0.0.0.0:8080/post`,
+        path: `https://premap.fly.dev/post`,
+        //path: `http://0.0.0.0:8080/post`,
         prefix: false,
         content: JSON.stringify({
           URL: imageUrl,
