@@ -74,7 +74,14 @@ export default function Image() {
             onClick={handleClick}
             style={{ cursor: "crosshair", maxWidth: "100%", height: "auto" }}
           />
-          <img src={helperUrl} />
+          <img
+            src={helperUrl}
+            style={{
+              width: "256px",
+              height: "256px",
+              objectFit: "cover",
+            }}
+          />
         </>
       ) : (
         <p>Loading image...</p>
